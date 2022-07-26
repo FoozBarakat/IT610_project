@@ -13,7 +13,6 @@ export class InputHandler {
       ) {
         this.keys.push(event.key);
       }
-      console.log(this.keys);
     });
 
     window.addEventListener("keyup", (event) => {
@@ -26,7 +25,6 @@ export class InputHandler {
       ) {
         this.keys.splice(this.keys.indexOf(event.key), 1);
       }
-      console.log(this.keys);
     });
   }
 }
