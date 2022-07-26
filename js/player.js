@@ -7,7 +7,7 @@ export class Player {
     this.width = 100;
     this.height = 91.3;
     this.x = 0;
-    this.y = this.game.height - this.height;
+    this.y = this.game.height - this.height - this.game.groundMargin;
     this.image = document.getElementById("player");
 
     this.frameX = 0;
@@ -61,7 +61,7 @@ export class Player {
   }
 
   draw(context) {
-    context.fillStyle = "#fff";
+    context.fillStyle = "rgba(0, 0, 0, 0)";
     context.fillRect(this.x, this.y, this.width, this.height);
     context.drawImage(
       this.image,
@@ -77,11 +77,12 @@ export class Player {
   }
 
   onGround() {
-    return this.y >= this.game.height - this.height;
+    return this.y >= this.game.height - this.height - this.game.groundMargin;
   }
 
-  setState(state) {
+  setState(state, speed) {
     this.currentState = this.states[state];
+    this.game.speed = this.game.maxSpeed * speed;
     this.currentState.enter();
   }
 }
