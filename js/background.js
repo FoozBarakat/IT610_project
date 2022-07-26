@@ -81,14 +81,10 @@ export class Background {
   }
 
   update() {
-    this.backgroundLayers.forEach((layer) => {
-      layer.update();
-    });
+    this.backgroundLayers.forEach((layer) => layer.update());
   }
 
   draw(context) {
-    this.backgroundLayers.forEach((layer) => {
-      layer.draw(context);
-    });
+    this.backgroundLayers.forEach((layer) => layer.draw(context));
   }
 }
