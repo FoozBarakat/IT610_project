@@ -2,6 +2,7 @@ import { Player } from "./player.js";
 import { InputHandler } from "./inputHandler.js";
 import { Background } from "./background.js";
 import { FlyingEnemy, ClimbingEnemy, GroundEnemy } from "./enemies.js";
+import { UI } from "./ui.js";
 
 // load event to wait for all dependent resourse such as stylesheets and image to be fully loaded and avalibale before ot run
 window.addEventListener("load", () => {
@@ -18,11 +19,19 @@ window.addEventListener("load", () => {
       this.speed = 0;
       this.maxSpeed = 6;
       this.player = new Player(this);
-      this.input = new InputHandler();
+      this.input = new InputHandler(this);
       this.background = new Background(this);
+      this.ui = new UI(this);
       this.enemies = [];
       this.enemyTimer = 0;
       this.enemyInterval = 1000;
+      this.particles = [];
+      this.maxParticles = 50;
+      this.debug = true;
+      this.score = 0;
+      this.fontColor = "black";
+      this.player.currentState = this.player.states[0];
+      this.player.currentState.enter();
     }
 
     update(deltaTime) {
@@ -41,12 +50,23 @@ window.addEventListener("load", () => {
         if (enemy.markedForDeletion)
           this.enemies.splice(this.enemies.indexOf(enemy), 1);
       });
+
+      // handle particles
+      this.particles.forEach((particle, index) => {
+        particle.update();
+        if (particle.markedForDeletion) this.particles.splice(index, 1);
+      });
+
+      if (this.particles.length > this.maxParticles)
+        this.particles = this.particles.slice(0, this.maxParticles);
     }
 
     draw(context) {
       this.background.draw(context);
       this.player.draw(context);
       this.enemies.forEach((enemy) => enemy.draw(context));
+      this.ui.draw(context);
+      this.particles.forEach((particle) => particle.draw(context));
     }
 
     addEnemy() {
@@ -55,8 +75,6 @@ window.addEventListener("load", () => {
       else if (this.speed > 0) this.enemies.push(new ClimbingEnemy(this));
 
       this.enemies.push(new FlyingEnemy(this));
-
-      console.log(this.enemies);
     }
   }
 
